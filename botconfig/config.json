@@ -1,0 +1,39 @@
+{
+   "prefix": "+",
+   "ownerIDS": [
+      "820280877048135680",
+      "683183458993832019",
+      "773516895826608139"
+   ],
+   "memer_api": "fhkgiYwJmBm",
+   "status": {
+      "text": "+help | {guildcount} Servers! | By:- Ron",
+      "text2": "+help / @Panda help | By Ron",
+      "type": "STREAMING",
+      "url": "https://twitch.tv/#"
+   },
+   "clientsettings": {
+      "nodes": [
+         {
+            "host": "lavalink.invalid-studios.com",
+            "port": 2333,
+            "password": "invaliduser"
+         }
+      ]
+   },
+   "spotify": {
+      "clientSecret": "8cb9da8b47b64f4bbbebb4cc3972b0e9",
+      "clientID": "fbed9dfaf69347a29c86bef4d24f83d7"
+   },
+   "settings": {
+      "leaveOnEmpty_Channel": {
+         "enabled": false,
+         "time_delay": 60000
+      },
+      "LeaveOnEmpty_Queue": {
+         "enabled": false,
+         "time_delay": 60000
+      },
+      "selfDeaf": true
+   }
+}
