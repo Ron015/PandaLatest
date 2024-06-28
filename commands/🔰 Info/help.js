@@ -1,7 +1,6 @@
 const {
-	MessageEmbed, MessageButton, MessageActionRow, MessageSelectMenu
+	MessageEmbed, MessageButton, MessageActionRow, MessageSelectMenu, Modal, TextInputComponent
 } = require("discord.js")
-const { Modal, TextInputComponent, SelectMenuComponent } = require('discord-modals');
 const config = require(`${process.cwd()}/botconfig/config.json`);
 var ee = require(`${process.cwd()}/botconfig/embed.json`);
 const emoji = require(`${process.cwd()}/botconfig/emojis.json`);
@@ -126,7 +125,7 @@ module.exports = {
           {
             label: "Overview",
             value: "Overview",
-            emoji: "833101995723194437",
+            emoji: "921988805442043925",
             description: "My Overview of me!"
           },
           {
@@ -409,15 +408,103 @@ const searchcmd = new Modal()
           }
         });
         }
-        client.on('modalSubmit', async (modal) => {
+        client.on('interactionCreate', async modal => {
+    if (!interaction.isModalSubmit()) return;
   if(modal.customId === 'searchcmd') {
-		const comming = new MessageEmbed()
-		.setTitle('Comming soon')
-		.setDescription("This Future Under Construction Soon We Will Add this For more information Join support server")
-		msg.reply({
-                embeds: comming,
-                ephemeral: true
-              })
+  let sfcmd = modal.fields.getTextInputValue("scmd");
+		const embed = new MessageEmbed().setColor(es.color).setThumbnail(es.thumb ? es.footericon && (es.footericon.includes("http://") || es.footericon.includes("https://")) ? es.footericon : client.user.displayAvatarURL() : null);
+        const cmd = client.commands.get(sfcmd.toLowerCase()) || client.commands.get(client.aliases.get(sfcmd.toLowerCase()));
+        var cat = false;
+        if(sfcmd.toLowerCase().includes("cust")){
+          let cuc = client.customcommands.get(message.guild.id, "commands");
+          if (cuc.length < 1) cuc = [handlemsg(client.la[ls].cmds.info.help.error1)]
+          else cuc = cuc.map(cmd => `\`${cmd.name}\``)
+          const items = cuc
+
+
+          const embed = new MessageEmbed()
+            .setColor(es.color).setThumbnail(es.thumb ? es.footericon && (es.footericon.includes("http://") || es.footericon.includes("https://")) ? es.footericon : client.user.displayAvatarURL() : null)
+            .setThumbnail(client.user.displayAvatarURL())
+            .setTitle(eval(client.la[ls]["cmds"]["info"]["help"]["variable1"]))
+            .setDescription(items.join("︲"))
+            .setFooter(handlemsg(client.la[ls].cmds.info.help.nocustom), client.user.displayAvatarURL());
+          
+          modal.reply({embeds: [embed]})
+          return;
+        }var cat = false;
+        if (!cmd) {
+          cat = client.categories.find(cat => cat.toLowerCase().includes(sfcmd.toLowerCase()))
+        }
+        if (!cmd && (!cat || cat == null)) {
+          return modal.reply({embeds: [embed.setColor(es.wrongcolor).setDescription(handlemsg(client.la[ls].cmds.info.help.noinfo, {command: sfcmd.toLowerCase()}))]});
+        } else if (cat) {
+          var category = cat;
+          const items = client.commands.filter((cmd) => cmd.category === category).map((cmd) => `\`${cmd.name}\``);
+          const embed = new MessageEmbed()
+            .setColor(es.color).setThumbnail(es.thumb ? es.footericon && (es.footericon.includes("http://") || es.footericon.includes("https://")) ? es.footericon : client.user.displayAvatarURL() : null)
+            .setThumbnail(client.user.displayAvatarURL())
+            .setTitle(eval(client.la[ls]["cmds"]["info"]["help"]["variable2"]))
+            .setFooter(handlemsg(client.la[ls].cmds.info.help.nocustom, {prefix: prefix}), client.user.displayAvatarURL());
+          let embeds = allotherembeds_eachcategory();
+          if(cat == "🔰 Info")
+            return modal.reply({embeds: [embeds[0]]})
+          if(cat == "💸 Economy")
+            return modal.reply({embeds: [embeds[1]]})
+          if(cat == "🏫 School Commands")
+            return modal.reply({embeds: [embeds[2]]})
+          if(cat == "🎶 Music")
+            return modal.reply({embeds: [embeds[3]]})
+          if(cat == "👀 Filter")
+            return modal.reply({embeds: [embeds[4]]})
+          if(cat == "⚜️ Custom Queue(s)")
+            return modal.reply({embeds: [embeds[5]]})
+          if(cat == "🚫 Administration")
+            return modal.reply({embeds: [embeds[6]]})
+          if(cat == "💪 Setup")
+            return modal.reply({embeds: [embeds[7]]})
+          if(cat == "⚙️ Settings")
+            return modal.reply({embeds: [embeds[8]]})
+          if(cat == "👑 Owner")
+            return modal.reply({embeds: [embeds[9]]})
+          if(cat == "⌨️ Programming")
+            return modal.reply({embeds: [embeds[10]]})
+          if(cat == "📈 Ranking")
+            return modal.reply({embeds: [embeds[11]]})
+          if(cat == "🔊 Soundboard")
+            return modal.reply({embeds: [embeds[12]]})
+          if(cat == "🎤 Voice")
+            return modal.reply({embeds: [embeds[13]]})
+          if(cat == "🕹️ Fun")
+            return modal.reply({embeds: [embeds[14]]})
+          if(cat == "🎮 MiniGames")
+            return modal.reply({embeds: [embeds[15]]})
+          if(cat == "😳 Anime-Emotions")
+            return modal.reply({embeds: [embeds[16]]})
+          if(cat == "🔞 NSFW")
+            return modal.reply({embeds: [embeds[17]]})
+          if (category.toLowerCase().includes("custom")) {
+            const cmd = client.commands.get(items[0].split("`").join("").toLowerCase()) || client.commands.get(client.aliases.get(items[0].split("`").join("").toLowerCase()));
+            try {
+              embed.setDescription(eval(client.la[ls]["cmds"]["info"]["help"]["variable3"]));
+            } catch {}
+          } else {
+            embed.setDescription(eval(client.la[ls]["cmds"]["info"]["help"]["variable4"]))
+          }
+          return modal.reply({embeds: [embed]})
+        }
+        if (cmd.name) embed.addField(handlemsg(client.la[ls].cmds.info.help.detail.name), `\`\`\`${cmd.name}\`\`\``);
+        if (cmd.name) embed.setTitle(handlemsg(client.la[ls].cmds.info.help.detail.about, {cmdname: cmd.name}));
+        if (cmd.description) embed.addField(handlemsg(client.la[ls].cmds.info.help.detail.desc), `\`\`\`${cmd.description}\`\`\``);
+        if (cmd.aliases && cmd.aliases.length > 0 && cmd.aliases[0].length > 1) try {
+          embed.addField(handlemsg(client.la[ls].cmds.info.help.detail.aliases), `\`${cmd.aliases.map((a) => `${a}`).join("`, `")}\``);
+        } catch { }
+        if (cmd.cooldown) embed.addField(handlemsg(client.la[ls].cmds.info.help.detail.cooldown), `\`\`\`${cmd.cooldown} Seconds\`\`\``);
+        else embed.addField(handlemsg(client.la[ls].cmds.info.help.detail.cooldown), `\`\`\`3 Seconds\`\`\``);
+        if (cmd.usage) {
+          embed.addField(handlemsg(client.la[ls].cmds.info.help.detail.usage), `\`\`\`${prefix}${cmd.usage}\`\`\``);
+          embed.setFooter(handlemsg(client.la[ls].cmds.info.help.detail.syntax), es.footericon && (es.footericon.includes("http://") || es.footericon.includes("https://")) ? es.footericon : client.user.displayAvatarURL());
+        }
+        return modal.reply({embeds: [embed]});
 	}
 	})
         function allotherembeds_eachcategory(filterdisabled = false){
