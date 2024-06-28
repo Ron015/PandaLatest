@@ -287,17 +287,16 @@ but you can also do \`${prefix}setup-SYSTEM\` e.g. \`${prefix}setup-welcome\``)
 <a:Developer:922766793074950144>  Made by **[Ron](https://discord.gg/zG8yUPhuxw)**`)
 .addField("How to get help?", `>>> **\` 1. Way \`** *Use the Buttons, to swap the Pages*\n**\` 2. Way \`** *Use the Menu to select all Help Pages, you want to display*\n**\` 3. Way \`** *Watch the Youtube Tutorial*`)
 const searchcmd = new Modal()
-          .setTitle("Search")
-          .setCustomId("searchcmd")
-          .addComponents(
+      .setCustomId('searchcmd')
+      .setTitle('Search')
+      .addComponents(
+        new MessageActionRow().addComponents(
           new TextInputComponent()
-          .setCustomId("scmd")
-          .setLabel(`Add Here Your Command Or Category For Search`)
-          .setMinLength(1)
-          .setMaxLength(15)
-          .setRequired(true)
-          .setStyle("SHORT")
-          )
+            .setCustomId('scmd')
+            .setLabel('Add Here Your Command Or Category For Search')
+            .setStyle('SHORT')
+        )
+        );
 
         //Send message with buttons
         let helpmsg = await message.reply({   
@@ -408,10 +407,10 @@ const searchcmd = new Modal()
           }
         });
         }
-        client.on('interactionCreate', async modal => {
+        client.on('interactionCreate', async interaction => {
     if (!interaction.isModalSubmit()) return;
-  if(modal.customId === 'searchcmd') {
-  let sfcmd = modal.fields.getTextInputValue("scmd");
+  if(interaction.customId === 'searchcmd') {
+  let sfcmd = interaction.fields.getTextInputValue("scmd");
 		const embed = new MessageEmbed().setColor(es.color).setThumbnail(es.thumb ? es.footericon && (es.footericon.includes("http://") || es.footericon.includes("https://")) ? es.footericon : client.user.displayAvatarURL() : null);
         const cmd = client.commands.get(sfcmd.toLowerCase()) || client.commands.get(client.aliases.get(sfcmd.toLowerCase()));
         var cat = false;
@@ -429,14 +428,14 @@ const searchcmd = new Modal()
             .setDescription(items.join("︲"))
             .setFooter(handlemsg(client.la[ls].cmds.info.help.nocustom), client.user.displayAvatarURL());
           
-          modal.reply({embeds: [embed]})
+          interaction.reply({embeds: [embed]})
           return;
         }var cat = false;
         if (!cmd) {
           cat = client.categories.find(cat => cat.toLowerCase().includes(sfcmd.toLowerCase()))
         }
         if (!cmd && (!cat || cat == null)) {
-          return modal.reply({embeds: [embed.setColor(es.wrongcolor).setDescription(handlemsg(client.la[ls].cmds.info.help.noinfo, {command: sfcmd.toLowerCase()}))]});
+          return interaction.reply({embeds: [embed.setColor(es.wrongcolor).setDescription(handlemsg(client.la[ls].cmds.info.help.noinfo, {command: sfcmd.toLowerCase()}))]});
         } else if (cat) {
           var category = cat;
           const items = client.commands.filter((cmd) => cmd.category === category).map((cmd) => `\`${cmd.name}\``);
@@ -447,41 +446,41 @@ const searchcmd = new Modal()
             .setFooter(handlemsg(client.la[ls].cmds.info.help.nocustom, {prefix: prefix}), client.user.displayAvatarURL());
           let embeds = allotherembeds_eachcategory();
           if(cat == "🔰 Info")
-            return modal.reply({embeds: [embeds[0]]})
+            return interaction.reply({embeds: [embeds[0]]})
           if(cat == "💸 Economy")
-            return modal.reply({embeds: [embeds[1]]})
+            return interaction.reply({embeds: [embeds[1]]})
           if(cat == "🏫 School Commands")
-            return modal.reply({embeds: [embeds[2]]})
+            return interaction.reply({embeds: [embeds[2]]})
           if(cat == "🎶 Music")
-            return modal.reply({embeds: [embeds[3]]})
+            return interaction.reply({embeds: [embeds[3]]})
           if(cat == "👀 Filter")
-            return modal.reply({embeds: [embeds[4]]})
+            return interaction.reply({embeds: [embeds[4]]})
           if(cat == "⚜️ Custom Queue(s)")
-            return modal.reply({embeds: [embeds[5]]})
+            return interaction.reply({embeds: [embeds[5]]})
           if(cat == "🚫 Administration")
-            return modal.reply({embeds: [embeds[6]]})
+            return interaction.reply({embeds: [embeds[6]]})
           if(cat == "💪 Setup")
-            return modal.reply({embeds: [embeds[7]]})
+            return interaction.reply({embeds: [embeds[7]]})
           if(cat == "⚙️ Settings")
-            return modal.reply({embeds: [embeds[8]]})
+            return interaction.reply({embeds: [embeds[8]]})
           if(cat == "👑 Owner")
-            return modal.reply({embeds: [embeds[9]]})
+            return interaction.reply({embeds: [embeds[9]]})
           if(cat == "⌨️ Programming")
-            return modal.reply({embeds: [embeds[10]]})
+            return interaction.reply({embeds: [embeds[10]]})
           if(cat == "📈 Ranking")
-            return modal.reply({embeds: [embeds[11]]})
+            return interaction.reply({embeds: [embeds[11]]})
           if(cat == "🔊 Soundboard")
-            return modal.reply({embeds: [embeds[12]]})
+            return interaction.reply({embeds: [embeds[12]]})
           if(cat == "🎤 Voice")
-            return modal.reply({embeds: [embeds[13]]})
+            return interaction.reply({embeds: [embeds[13]]})
           if(cat == "🕹️ Fun")
-            return modal.reply({embeds: [embeds[14]]})
+            return interaction.reply({embeds: [embeds[14]]})
           if(cat == "🎮 MiniGames")
-            return modal.reply({embeds: [embeds[15]]})
+            return interaction.reply({embeds: [embeds[15]]})
           if(cat == "😳 Anime-Emotions")
-            return modal.reply({embeds: [embeds[16]]})
+            return interaction.reply({embeds: [embeds[16]]})
           if(cat == "🔞 NSFW")
-            return modal.reply({embeds: [embeds[17]]})
+            return interaction.reply({embeds: [embeds[17]]})
           if (category.toLowerCase().includes("custom")) {
             const cmd = client.commands.get(items[0].split("`").join("").toLowerCase()) || client.commands.get(client.aliases.get(items[0].split("`").join("").toLowerCase()));
             try {
@@ -490,7 +489,7 @@ const searchcmd = new Modal()
           } else {
             embed.setDescription(eval(client.la[ls]["cmds"]["info"]["help"]["variable4"]))
           }
-          return modal.reply({embeds: [embed]})
+          return interaction.reply({embeds: [embed]})
         }
         if (cmd.name) embed.addField(handlemsg(client.la[ls].cmds.info.help.detail.name), `\`\`\`${cmd.name}\`\`\``);
         if (cmd.name) embed.setTitle(handlemsg(client.la[ls].cmds.info.help.detail.about, {cmdname: cmd.name}));
@@ -504,7 +503,7 @@ const searchcmd = new Modal()
           embed.addField(handlemsg(client.la[ls].cmds.info.help.detail.usage), `\`\`\`${prefix}${cmd.usage}\`\`\``);
           embed.setFooter(handlemsg(client.la[ls].cmds.info.help.detail.syntax), es.footericon && (es.footericon.includes("http://") || es.footericon.includes("https://")) ? es.footericon : client.user.displayAvatarURL());
         }
-        return modal.reply({embeds: [embed]});
+        return interaction.reply({embeds: [embed]});
 	}
 	})
         function allotherembeds_eachcategory(filterdisabled = false){
